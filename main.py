@@ -13,7 +13,7 @@ loaded_model.load_weights("model.h5")
 print("Loaded model from disk")
 loaded_model.compile(loss='categorical_crossentropy', metrics=['accuracy'],optimizer='adam')
 
-objects = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
+objects = ['koala', 'blobfish', 'Pufferfish', 'quokka', 'puppy', 'water bears', 'hooman']
 def emotion_analysis(emotions):
     objects = ['angry', 'disgust', 'fear', 'happy', 'sad', 'surprise', 'neutral']
     y_pos = np.arange(len(objects))
@@ -34,7 +34,9 @@ x = np.expand_dims(x, axis = 0)
 x /= 255
 
 custom = loaded_model.predict(x)
-print(custom[0])
+print(custom)
+
+# print("%s: %.2f%%" % (loaded_model.metrics_names[1], scores[1]*100))
 emotion_analysis(custom[0])
 
 x = np.array(x, 'float32')
@@ -51,4 +53,5 @@ for i in range(0,len(a)):
         m=a[i]
         ind=i
 
-print('Expression Prediction:',objects[ind])
+print('prediction:',objects[ind])
+print("score",round(custom[0][0]*100,2))
