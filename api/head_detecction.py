@@ -15,7 +15,7 @@ def water_mark(image):
     image = np.dstack([image, np.ones((oH,oW), dtype="uint8") * 255])
 
     lgo_img = cv2.imread('logo.png',cv2.IMREAD_UNCHANGED)
-    
+
     scl = 10
     w = int(lgo_img.shape[1] * scl / 30)
     h = int(lgo_img.shape[0] * scl / 30)
@@ -34,15 +34,17 @@ def detect_head(image,text):
     image = cv2.imread(image)
     image_gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     faces = face_cascade.detectMultiScale(image_gray)
-    print(f"{len(faces)} faces detected in the image.")
-    (text_width, text_height) = cv2.getTextSize(text, font, fontScale=font_scale, thickness=1)[0]
-    for x, y, width, height in faces:
-        text_offset_x = x
-        text_offset_y = y
-        box_coords = ((text_offset_x, text_offset_y), (text_offset_x + text_width + 2, text_offset_y - text_height - 2))
-        cv2.rectangle(image, box_coords[0], box_coords[1], rectangle_bgr, cv2.FILLED)
-        cv2.putText(image, text, (text_offset_x, text_offset_y), font, fontScale=font_scale, color=(0, 0, 0), thickness=2)
-        cv2.rectangle(image, (x, y), (x + width, y + height), color=(0, 255, 0), thickness=2)
-    water_mark(image)
+    if len(faces) == 1:
+        (text_width, text_height) = cv2.getTextSize(text, font, fontScale=font_scale, thickness=1)[0]
+        for x, y, width, height in faces:
+            text_offset_x = x
+            text_offset_y = y
+            box_coords = ((text_offset_x, text_offset_y), (text_offset_x + text_width + 2, text_offset_y - text_height - 2))
+            cv2.rectangle(image, box_coords[0], box_coords[1], rectangle_bgr, cv2.FILLED)
+            cv2.putText(image, text, (text_offset_x, text_offset_y), font, fontScale=font_scale, color=(0, 0, 0), thickness=2)
+            cv2.rectangle(image, (x, y), (x + width, y + height), color=(0, 255, 0), thickness=2)
+        water_mark(image)
+    else:
+        return "Multiple faces in the image"
     # cv2.imwrite("api/kids_detected.jpg", image)
-    print("ok")
+    # print("ok")
