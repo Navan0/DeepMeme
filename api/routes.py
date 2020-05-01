@@ -23,6 +23,11 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], image))
     detected = detect_head('uploads/'+str(image),text)
 
+    if text == '':
+        flash('Enter the text')
+        return redirect(url_for('index'))
+
+
     if detected == 'Multiple faces in the image':
         flash('Multiple faces detected, upload single face pictures')
         return redirect(url_for('index'))
